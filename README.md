@@ -14,7 +14,6 @@ pip install Pandas
 - Root
   - In        Contains the .pdf file with the editable fields and the .csv containing the input data
   - Out       Will contain the output .pdf with the fields filled in
-  - Images    Screenshots/images used for this page
 ```
 
 ## Adapting The Code To Your Requirements
