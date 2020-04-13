@@ -130,4 +130,4 @@ Out[5]:
 ```
 
 ## Support or Contact
-Run into any bugs or have further questions? Drop me an e-mail HridaiTrivedy@gmail.com
+Run into any bugs or have further questions? Drop me an e-mail hridai@thatautomation.co
