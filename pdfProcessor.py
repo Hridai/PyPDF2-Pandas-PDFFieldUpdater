@@ -16,18 +16,20 @@ def set_need_appearances_writer(writer: PdfFileWriter):
         print('set_need_appearances_writer() catch : ', repr(e))
         return writer
 
-csvin = "H:\\gitprojects\\\PyPDF2-Pandas-PDFFieldUpdater\\in\\data.csv"
-infile = "H:\\gitprojects\\\PyPDF2-Pandas-PDFFieldUpdater\\in\\PatientIntakeForm.pdf"
-data = pd.read_csv( csvin )
+csvin = "C:\\Gitprojects\\PyPDF2-Pandas-PDFFieldUpdater\\in\\EISAutoFill.csv"
+infile = "C:\\Gitprojects\\PyPDF2-Pandas-PDFFieldUpdater\\in\\EIS 3 Certificate - Autofilled.pdf"
+outfile_dir = "C:\\Gitprojects\\PyPDF2-Pandas-PDFFieldUpdater\\out\\"
+
+data = pd.read_csv(csvin)
 pdf = PdfFileReader(open(infile, "rb"), strict=False)  
 if "/AcroForm" in pdf.trailer["/Root"]:
     pdf.trailer["/Root"]["/AcroForm"].update(
         {NameObject("/NeedAppearances"): BooleanObject(True)})
-fields = pdf.getFields() # Run in console to see Key names for field entry
+pdf_fields = [str(x) for x in pdf.getFields().keys()] # List of all pdf field names
+csv_fields = data.columns.tolist()
 
 i = 0 #Filename numerical prefix
 for j, rows in data.iterrows():
-    outfile = "H:\\gitprojects\\\PyPDF2-Pandas-PDFFieldUpdater\\out\\"
     i += 1
     
     pdf2 = PdfFileWriter()
@@ -39,12 +41,39 @@ for j, rows in data.iterrows():
     if "/AcroForm" in pdf2._root_object:
         pdf2._root_object["/AcroForm"].update(
             {NameObject("/NeedAppearances"): BooleanObject(True)})
-        
-    field_dictionary = {"PatientFirstNameMain[0]": rows['FirstName'], "PatientLastNameMain[0]": rows['LastName'], 
-                        "Age[0]": rows['Age'], "CellNum[0]" : rows['Cellnum']}
     
-    outfile = outfile + str(i) + '_out.pdf'
+    # Key = pdf_field_name : Value = csv_field_value
+    field_dictionary_1 = {"Full Name": str(rows['FullName']),
+                        "Address Line 1": rows['AddressLine1'],
+                        "Address Line 2": rows['AddressLine2'],
+                        "Address Line 3": rows['AddressLine3'],
+                        "Post Code": rows['PostCode'],
+                        "Description of Shares": rows['DescriptionOfShares'],
+                        "Nominal Value of each Share": rows['NominalValueOfEachShare'],
+                        "Number of Shares Issued": rows['NumberOfSharesIssued'],
+                        "Amount Subscribed": rows['AmountSubscribed'],
+                        "Share Issue Date": rows['ShareIssueDate'],
+                        "Termination Date of these Shares": rows['TerminationDateOfTheseShares'],
+                        "Received any value?": rows['ReceivedAnyValue?'],
+                        "Name of Company Representative": rows['NameOfCompanyRepresentative'],
+                        "Company Name": rows['CompanyName'],
+                        "Unique Investment Reference Number": rows['UniqueInvestmentReferenceNumber'],
+                        "Capacity in which signed": rows['CapacityInWhichSigned'],
+                        "Registered Office Address Line 1": rows['RegisteredOfficeAddressLine1'],
+                        "Registered Office Address Line 2": rows['RegisteredOfficeAddressLine2'],
+                        "Registered Office Address Line 3": rows['RegisteredOfficeAddressLine3'],
+                        "Date Signed": rows['DateSigned'],
+                        "Post Code 2": rows['RegisteredOfficePostCode'],
+                        }
+    
+    temp_out_dir = outfile_dir + str(i) + '_out.pdf'
+    
     pdf2.addPage(pdf.getPage(0))
-    pdf2.updatePageFormFieldValues(pdf2.getPage(0), field_dictionary)
-    outputStream = open(outfile, "wb")
+    pdf2.updatePageFormFieldValues(pdf2.getPage(0), field_dictionary_1)
+    pdf2.addPage(pdf.getPage(1))
+    pdf2.addPage(pdf.getPage(2))
+    pdf2.addPage(pdf.getPage(3))
+    
+    outputStream = open(temp_out_dir, "wb")
     pdf2.write(outputStream)
+    outputStream.close()

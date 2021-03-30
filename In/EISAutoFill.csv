@@ -1,0 +1,5 @@
+FullName,AddressLine1,AddressLine2,AddressLine3,PostCode,DescriptionOfShares,NominalValueOfEachShare,NumberOfSharesIssued,AmountSubscribed,ShareIssueDate,TerminationDateOfTheseShares,ReceivedAnyValue?,UniqueInvestmentReferenceNumber,KIC?,NameOfCompanyRepresentative,CapacityInWhichSigned,CompanyName,RegisteredOfficeAddressLine1,RegisteredOfficeAddressLine2,RegisteredOfficeAddressLine3,RegisteredOfficePostCode,DateSigned
+One,1,e,5,a,1,e,5,a,1,e,5,a,1,e,5,a,1,e,5,a,TBC
+Two,2,f,6,b,2,f,6,b,2,f,6,b,2,f,6,b,2,f,6,b,TBC
+Three,3,g,7,c,3,g,7,c,3,g,7,c,3,g,7,c,3,g,7,c,TBC
+Four,4,h,8,d,4,h,8,d,4,h,8,d,4,h,8,d,4,h,8,d,TBC
