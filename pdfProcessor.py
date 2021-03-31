@@ -1,6 +1,7 @@
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from PyPDF2.generic import BooleanObject, NameObject, IndirectObject
 import pandas as pd
+import os
 
 def set_need_appearances_writer(writer: PdfFileWriter):
     try:
@@ -16,12 +17,16 @@ def set_need_appearances_writer(writer: PdfFileWriter):
         print('set_need_appearances_writer() catch : ', repr(e))
         return writer
 
-csvin = "C:\\Gitprojects\\PyPDF2-Pandas-PDFFieldUpdater\\in\\EISAutoFill.csv"
-infile = "C:\\Gitprojects\\PyPDF2-Pandas-PDFFieldUpdater\\in\\EIS 3 Certificate - Autofilled.pdf"
-outfile_dir = "C:\\Gitprojects\\PyPDF2-Pandas-PDFFieldUpdater\\out\\"
+print()
+
+csv_filename = "EISAutoFill.csv"
+pdf_filename = "EIS 3 Certificate - Autofilled.pdf"
+csvin = os.path.normpath(os.path.join(os.getcwd(),'in',csv_filename))
+pdfin = os.path.normpath(os.path.join(os.getcwd(),'in',pdf_filename))
+pdfout = os.path.normpath(os.path.join(os.getcwd(),'out'))
 
 data = pd.read_csv(csvin)
-pdf = PdfFileReader(open(infile, "rb"), strict=False)  
+pdf = PdfFileReader(open(pdfin, "rb"), strict=False)  
 if "/AcroForm" in pdf.trailer["/Root"]:
     pdf.trailer["/Root"]["/AcroForm"].update(
         {NameObject("/NeedAppearances"): BooleanObject(True)})
@@ -66,7 +71,7 @@ for j, rows in data.iterrows():
                         "Post Code 2": rows['RegisteredOfficePostCode'],
                         }
     
-    temp_out_dir = outfile_dir + str(i) + '_out.pdf'
+    temp_out_dir = os.path.normpath(os.path.join(pdfout,str(i) + 'out.pdf'))
     
     pdf2.addPage(pdf.getPage(0))
     pdf2.updatePageFormFieldValues(pdf2.getPage(0), field_dictionary_1)
