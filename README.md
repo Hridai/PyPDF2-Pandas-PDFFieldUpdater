@@ -30,8 +30,10 @@ You will need the **exact** field names for each field you are trying to change 
 ```python
 from PyPDF2 import PdfFileReader
 infile = "C:\\Your File Path\\YourPDF.pdf"
+data = pd.read_csv(csvin) # Read in CSV
+pdf = PdfFileReader(open(infile, "rb"), strict=False) #Read in PDF with editable fields
 pdf_fields = [str(x) for x in pdf.getFields().keys()] # List of all pdf field names
-csv_fields = data.columns.tolist()
+csv_fields = data.columns.tolist() # List of all excel column names
 ```
 The pdf_fields variable will have all the pdf fields that have textboxes labelled in the PDF. The csv_fields have the headings of the csv that has been read in which will be used to populate the output pdf.
 
