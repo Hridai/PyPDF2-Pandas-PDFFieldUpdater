@@ -23,7 +23,7 @@ The only variables that need amending are:
   - csvin                 the path to the .csv file
   - infile                the pdf form you are trying to affect
   - outfile_dir           the directory where the final versions will be output
-  - field_dictionary_1    Key Value pairs. Keys are the field names in the pdf you are trying to change, the values what you want to write into them
+  - field_dictionary_1    Key Value pairs. Keys are the field names in the pdf you are trying to change, the values are what you wish to write into them
 ```
 You will need the **exact** field names for each field you are trying to change in the pdf. Note this will not necessarily be the label next to the textbox you are writing to, but will be the name assigned to the textbox itself. This is how to get those values:
 
