@@ -20,11 +20,11 @@ pip install Pandas
 
 ## Adapting The Code To Your Requirements
 All the code lives in **pdfProcessor.py**
-The only variables that need amending are:
+Ensure that you have added the pdf you wish to edit and the csv containing the data to the subfolder "In"
+The only variables that subsequently need amending are:
 ```
-  - csvin                 the path to the .csv file
-  - infile                the pdf form you are trying to affect
-  - outfile_dir           the directory where the final versions will be output
+  - csv_filename          The file name of the .csv you pasted into the 'In' folder 
+  - pdf_filename          The file name of the .pdf you pasted into the 'In' folder
   - field_dictionary_1    Key Value pairs. Keys are the field names in the pdf you are trying to change, the values are what you wish to write into them
 ```
 You will need the **exact** field names for each field you are trying to change in the pdf. Note this will not necessarily be the label next to the textbox you are writing to, but will be the name assigned to the textbox itself. This is how to get those values:
@@ -78,6 +78,7 @@ You will need a field_dictionary_x variable for every single page's fields and u
     pdf2.addPage(pdf.getPage(2))
     pdf2.addPage(pdf.getPage(3))
 ```
+To avoid any issues viewing these augmented output pdfs please be sure to use Adobe. I am aware that there are issues opening these pdfs using "Nitro" and that is not an issue with the code but an issue with Nitro itself. Previewing these pdfs in a browser or Adobe itself should work perfectly well.
 
 ## Support or Contact
 Run into any bugs or need help adapting this to your pdf / csv? Drop me an e-mail HridaiTrivedy@Gmail.com and I'll get right back to you!
