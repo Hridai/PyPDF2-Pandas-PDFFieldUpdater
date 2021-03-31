@@ -20,114 +20,60 @@ pip install Pandas
 All the code lives in **pdfProcessor.py**
 The only variables that need amending are:
 ```
-  - csvin     the path to the .csv file
-  - infile    the pdf form you are trying to affect
-  - outfile   the directory where the final versions will be output
-  - field_dictionary    Key Value pairs. Keys are the field names in the pdf you are trying to change, the values what you want to write into them
+  - csvin                 the path to the .csv file
+  - infile                the pdf form you are trying to affect
+  - outfile_dir           the directory where the final versions will be output
+  - field_dictionary_1    Key Value pairs. Keys are the field names in the pdf you are trying to change, the values what you want to write into them
 ```
-You will need the **exact** field names for each field you are trying to change in the pdf. Note this will not necessarily be the label next to the textbox you are writing to, but will be the name assigned to the textbox itself. This is how to get that value:
+You will need the **exact** field names for each field you are trying to change in the pdf. Note this will not necessarily be the label next to the textbox you are writing to, but will be the name assigned to the textbox itself. This is how to get those values:
 
 ```python
 from PyPDF2 import PdfFileReader
 infile = "C:\\Your File Path\\YourPDF.pdf"
-pdf = PdfFileReader(open(infile, "rb"), strict=False)
-fields = pdf.getFields()
+pdf_fields = [str(x) for x in pdf.getFields().keys()] # List of all pdf field names
+csv_fields = data.columns.tolist()
 ```
-The dictionary is now output to the _fields_ variable. There is a good chance this is not viewable in your locals due to it's large size. Type this variable name into the console to see the output if this is the case- and decipher the field names. The field names in the example file that comes with this directory (PatientIntakeForm.pdf) will output the below. The field names visible in the below snippet are __Address[0]__ and __Age[0]__ and __CellNum[0]__
-These are what will need to be passed as keys into the variable _field_dictionary_ to write to these fields.
+The pdf_fields variable will have all the pdf fields that have textboxes labelled in the PDF. The csv_fields have the headings of the csv that has been read in which will be used to populate the output pdf.
+
+It is as simple as populating the variable field_dictionary_1 with these two field names as key : value pairs.
+
+## Notes and Caveats
+You will have to call the PdfFileReader.addPage() method for every page in the original pdf which you wish to also be copied over.
+You will need a field_dictionary_x variable for every single page's fields and use this after you add the page to the new pdf object, seen here in the snippet below in whcih we are adding four pages but only amending page 1's fields:
 
 ```python
-fields
-Out[5]: 
-{'Address[0]': {'/FT': '/Tx',
-  '/Ff': 8388608,
-  '/Parent': {'/Kids': [IndirectObject(194, 0),
-    IndirectObject(195, 0),
-    IndirectObject(196, 0),
-    IndirectObject(197, 0),
-    IndirectObject(198, 0),
-    IndirectObject(199, 0),
-    IndirectObject(200, 0),
-    IndirectObject(201, 0),
-    IndirectObject(22, 0),
-    IndirectObject(203, 0),
-    IndirectObject(204, 0),
-    IndirectObject(205, 0),
-    IndirectObject(206, 0),
-    IndirectObject(207, 0),
-    IndirectObject(208, 0),
-    IndirectObject(209, 0)],
-   '/Parent': {'/Kids': [IndirectObject(19, 0),
-     IndirectObject(20, 0),
-     IndirectObject(183, 0),
-     IndirectObject(184, 0),
-     IndirectObject(185, 0),
-     IndirectObject(186, 0),
-     IndirectObject(187, 0),
-     IndirectObject(188, 0),
-     IndirectObject(189, 0),
-     IndirectObject(190, 0),
-     IndirectObject(191, 0),
-     IndirectObject(192, 0),
-     IndirectObject(193, 0),
-     IndirectObject(21, 0),
-     IndirectObject(210, 0),
-     IndirectObject(211, 0),
-     IndirectObject(212, 0),
-     IndirectObject(213, 0),
-     IndirectObject(214, 0)],
-    '/Parent': {'/Kids': [IndirectObject(18, 0)], '/T': 'form1[0]'},
-    '/T': 'Page1[0]'},
-   '/T': 'PatientInformation[0]'},
-  '/T': 'Address[0]',
-  '/TU': 'Address'},
- 'Age[0]': {'/FT': '/Tx',
-  '/Ff': 8388608,
-  '/Parent': {'/Kids': [IndirectObject(194, 0),
-    IndirectObject(195, 0),
-    IndirectObject(196, 0),
-    IndirectObject(197, 0),
-    IndirectObject(198, 0),
-    IndirectObject(199, 0),
-    IndirectObject(200, 0),
-    IndirectObject(201, 0),
-    IndirectObject(22, 0),
-    IndirectObject(203, 0),
-    IndirectObject(204, 0),
-    IndirectObject(205, 0),
-    IndirectObject(206, 0),
-    IndirectObject(207, 0),
-    IndirectObject(208, 0),
-    IndirectObject(209, 0)],
-   '/Parent': {'/Kids': [IndirectObject(19, 0),
-     IndirectObject(20, 0),
-     IndirectObject(183, 0),
-     IndirectObject(184, 0),
-     IndirectObject(185, 0),
-     IndirectObject(186, 0),
-     IndirectObject(187, 0),
-     IndirectObject(188, 0),
-     IndirectObject(189, 0),
-     IndirectObject(190, 0),
-     IndirectObject(191, 0),
-     IndirectObject(192, 0),
-     IndirectObject(193, 0),
-     IndirectObject(21, 0),
-     IndirectObject(210, 0),
-     IndirectObject(211, 0),
-     IndirectObject(212, 0),
-     IndirectObject(213, 0),
-     IndirectObject(214, 0)],
-    '/Parent': {'/Kids': [IndirectObject(18, 0)], '/T': 'form1[0]'},
-    '/T': 'Page1[0]'},
-   '/T': 'PatientInformation[0]'},
-  '/T': 'Age[0]',
-  '/TU': 'Age'},
- 'CellNum[0]': {'/FT': '/Tx',
-  '/Parent': {'/Kids': [IndirectObject(194, 0),
-    IndirectObject(195, 0),
-    IndirectObject(196, 0),
+    # Key = pdf_field_name : Value = csv_field_value
+    field_dictionary_1 = {"Full Name": str(rows['FullName']),
+                        "Address Line 1": rows['AddressLine1'],
+                        "Address Line 2": rows['AddressLine2'],
+                        "Address Line 3": rows['AddressLine3'],
+                        "Post Code": rows['PostCode'],
+                        "Description of Shares": rows['DescriptionOfShares'],
+                        "Nominal Value of each Share": rows['NominalValueOfEachShare'],
+                        "Number of Shares Issued": rows['NumberOfSharesIssued'],
+                        "Amount Subscribed": rows['AmountSubscribed'],
+                        "Share Issue Date": rows['ShareIssueDate'],
+                        "Termination Date of these Shares": rows['TerminationDateOfTheseShares'],
+                        "Received any value?": rows['ReceivedAnyValue?'],
+                        "Name of Company Representative": rows['NameOfCompanyRepresentative'],
+                        "Company Name": rows['CompanyName'],
+                        "Unique Investment Reference Number": rows['UniqueInvestmentReferenceNumber'],
+                        "Capacity in which signed": rows['CapacityInWhichSigned'],
+                        "Registered Office Address Line 1": rows['RegisteredOfficeAddressLine1'],
+                        "Registered Office Address Line 2": rows['RegisteredOfficeAddressLine2'],
+                        "Registered Office Address Line 3": rows['RegisteredOfficeAddressLine3'],
+                        "Date Signed": rows['DateSigned'],
+                        "Post Code 2": rows['RegisteredOfficePostCode'],
+                        }
+    
+    temp_out_dir = outfile_dir + str(i) + '_out.pdf'
+    
+    pdf2.addPage(pdf.getPage(0))
+    pdf2.updatePageFormFieldValues(pdf2.getPage(0), field_dictionary_1)
+    pdf2.addPage(pdf.getPage(1))
+    pdf2.addPage(pdf.getPage(2))
+    pdf2.addPage(pdf.getPage(3))
 ```
 
 ## Support or Contact
-Run into any bugs or have further questions? Drop me an e-mail HridaiTrivedy@Gmail.com
+Run into any bugs or need help adapting this to your pdf / csv? Drop me an e-mail HridaiTrivedy@Gmail.com and I'll get right back to you!
