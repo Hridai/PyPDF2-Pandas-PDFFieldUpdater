@@ -2,6 +2,8 @@
 
 This is a simple guide to populating a .pdf with editable fields programatically - with data found in a .csv file and saving a copy of this pdf for every row found in the dataset.
 
+![](Resources/processscreenshot.jpg)
+
 ## Requirements
 Libraries: PyPDF2, Pandas
 ```python
