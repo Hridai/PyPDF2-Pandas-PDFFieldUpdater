@@ -39,7 +39,7 @@ It is as simple as populating the variable field_dictionary_1 with these two fie
 
 ## Notes and Caveats
 You will have to call the PdfFileReader.addPage() method for every page in the original pdf which you wish to also be copied over.
-You will need a field_dictionary_x variable for every single page's fields and use this after you add the page to the new pdf object, seen here in the snippet below in whcih we are adding four pages but only amending page 1's fields:
+You will need a field_dictionary_x variable for every single page's fields and use this after you add the page to the new pdf object, seen here in the snippet below in which we are adding four pages but only amending page 1's fields:
 
 ```python
     # Key = pdf_field_name : Value = csv_field_value
