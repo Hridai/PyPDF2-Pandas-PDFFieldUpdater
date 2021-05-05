@@ -42,10 +42,6 @@ if __name__ == '__main__':
             pdf2._root_object["/AcroForm"].update(
                 {NameObject("/NeedAppearances"): BooleanObject(True)})
         
-        if "/AcroForm" in pdf2._root_object:
-            pdf2._root_object["/AcroForm"].update(
-                {NameObject("/NeedAppearances"): BooleanObject(True)})
-        
         # Key = pdf_field_name : Value = csv_field_value
         field_dictionary_1 = {"Full Name": str(rows['FullName']),
                             "Address Line 1": rows['AddressLine1'],
