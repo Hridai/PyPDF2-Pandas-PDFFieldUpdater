@@ -5,9 +5,15 @@ This is a simple guide to populating a .pdf with editable fields programatically
 ![](Resources/processscreenshot.jpg)
 
 ## Requirements
+### IMPORTANT VERSIONING ISSUE
+August 2023 Update: PyPDF2 cannot simply be naiively installed, as the latest major release of PyPDF2 appears to have issues with certain types of PDFs, meaning that the PDF in this repo can no longer be used as a test. The lack of developer / migratory notes means that if you install PyPDF2 and you are using version 3, this demo will simply not work and it will not be clear why. I will update this repo if I figure it out. Equally feel free to push changes if you can make this demo work with version 3 please!
+
+**Short Answer:** Use the last version available to us prior to the major version 3 'upgrade' of the library. **Force install version 2.12.1.**
+
 Libraries: PyPDF2, Pandas
+
 ```python
-pip install PyPDF2
+pip install PyPDF2==2.12.1
 pip install Pandas
 ```
 
